@@ -1,9 +1,9 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import NewsCard from '../components/NewsCard'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
 
-const myAPIKey = '734d1427baf242f6a5cce327947fd375'
+const myAPIKey = '734d1427baf242f6a5cce327947fd375';
 
 const Home: NextPage = ({ articles }) => {
   return (
@@ -27,23 +27,22 @@ const Home: NextPage = ({ articles }) => {
         </ul>
       </main>
 
-      <footer className={styles.footer}>
-        by Pol Milian
-      </footer>
+      <footer className={styles.footer}>by Pol Milian</footer>
     </div>
-  )
-}
+  );
+};
 export async function getStaticProps() {
-  const res = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${myAPIKey}`)
-  const articles = await res.json()
+  const res = await fetch(
+    `https://newsapi.org/v2/top-headlines?country=us&apiKey=${myAPIKey}`
+  );
+  const articles = await res.json();
   console.log(articles);
-
 
   return {
     props: {
       articles,
     },
-  }
+  };
 }
 
-export default Home
+export default Home;
