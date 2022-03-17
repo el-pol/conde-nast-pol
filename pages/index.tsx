@@ -1,7 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
-import MyButton from '../components/NewsCard';
 import NewsCard from '../components/NewsCard';
 import styles from '../styles/Home.module.css';
 
@@ -18,7 +16,7 @@ const Home: NextPage = ({ articles }) => {
 
       <h1 className="text-3xl font-bold underline">aloha</h1>
       <main>
-        <ul className="grid grid-cols-4 gap-4">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-center">
           {articles.articles.map((article) => {
             return (
               <li key={article.title}>
