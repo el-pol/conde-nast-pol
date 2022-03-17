@@ -98,9 +98,9 @@ const Home: NextPage = () => {
         {isError && <p>There was an error!</p>}
         {data?.articles?.length && (
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-center">
-            {data?.articles?.map((article) => {
+            {data?.articles?.map((article, i) => {
               return (
-                <li key={article.title}>
+                <li key={`article.title_${i}`}>
                   <NewsCard post={article} />
                 </li>
               );
