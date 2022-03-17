@@ -1,3 +1,4 @@
+import React from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import NewsCard from '../components/NewsCard';
@@ -5,7 +6,38 @@ import styles from '../styles/Home.module.css';
 
 const myAPIKey = '734d1427baf242f6a5cce327947fd375';
 
-const Home: NextPage = ({ articles }) => {
+const Home: NextPage = () => {
+  const [data, setData] = React.useState(null);
+  const [isLoading, setLoading] = React.useState(false);
+  const [filters, setFilters] = React.useState<string[]>([]);
+  const [values, setValues] = React.useState<string>('');
+
+  React.useEffect(() => {
+    const prepareParams = filters
+      .map((query) => encodeURIComponent(query))
+      .join(' ');
+    console.log(prepareParams);
+
+    setLoading(true);
+    fetch(
+      `https://newsapi.org/v2/everything?q=${prepareParams}&apiKey=${myAPIKey}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+        setLoading(false);
+      });
+    setValues('');
+  }, [filters]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const array = values.split(' ');
+    console.log(array);
+
+    setFilters(array);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -14,35 +46,45 @@ const Home: NextPage = ({ articles }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1 className="text-3xl font-bold underline">aloha</h1>
-      <main>
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-center">
-          {articles.articles.map((article) => {
-            return (
-              <li key={article.title}>
-                <NewsCard post={article} />
-              </li>
-            );
-          })}
-        </ul>
+      <main className="container mx-auto px-4">
+        <h1 className="my-8 text-3xl font-bold underline text-center">
+          Pol Conde Nast
+        </h1>
+        <form className="mb-8" onSubmit={handleSubmit}>
+          <input
+            className="shadow appearance-none border rounded w-72 py-2 mx-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            name="filters"
+            id="filters"
+            onChange={(e) => setValues(e.target.value)}
+            value={values}
+            placeholder="Search for something cool"
+          ></input>
+          <button
+            className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+            onClick={handleSubmit}
+          >
+            Go!
+          </button>
+        </form>
+        {isLoading && <p>Loading...</p>}
+        {data?.articles?.length && (
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-center">
+            {data?.articles?.map((article) => {
+              return (
+                <li key={article.title}>
+                  <NewsCard post={article} />
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </main>
 
       <footer className={styles.footer}>by Pol Milian</footer>
     </div>
   );
 };
-export async function getStaticProps() {
-  const res = await fetch(
-    `https://newsapi.org/v2/top-headlines?country=us&apiKey=${myAPIKey}`
-  );
-  const articles = await res.json();
-  console.log(articles);
-
-  return {
-    props: {
-      articles,
-    },
-  };
-}
 
 export default Home;
