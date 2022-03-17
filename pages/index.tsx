@@ -11,9 +11,11 @@ const Home: NextPage = () => {
   const [isLoading, setLoading] = React.useState(false);
   const [filters, setFilters] = React.useState<string[]>([]);
   const [values, setValues] = React.useState<string>('');
+  const [isError, setIsError] = React.useState(false);
 
   // On first load, we populate with the top headlines
   React.useEffect(() => {
+    setIsError(false);
     setLoading(true);
     // Improvement: detect user's location and pass it as a parameter in order
     // to show relevant headlines
@@ -22,6 +24,10 @@ const Home: NextPage = () => {
       .then((data) => {
         setData(data);
         setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setIsError(true);
       });
   }, []);
 
@@ -29,8 +35,8 @@ const Home: NextPage = () => {
     const prepareParams = filters
       .map((query) => encodeURIComponent(query))
       .join(' ');
-    console.log(prepareParams);
 
+    setIsError(false);
     setLoading(true);
     fetch(
       `https://newsapi.org/v2/everything?q=${prepareParams}&apiKey=${myAPIKey}`
@@ -39,6 +45,10 @@ const Home: NextPage = () => {
       .then((data) => {
         setData(data);
         setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setIsError(true);
       });
 
     // Resetting the input after successful fetch
@@ -85,6 +95,7 @@ const Home: NextPage = () => {
           </button>
         </form>
         {isLoading && <p>Loading...</p>}
+        {isError && <p>There was an error!</p>}
         {data?.articles?.length && (
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-center">
             {data?.articles?.map((article) => {
@@ -97,8 +108,6 @@ const Home: NextPage = () => {
           </ul>
         )}
       </main>
-
-      <footer>by Pol Milian</footer>
     </div>
   );
 };
