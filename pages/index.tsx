@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import Link from 'next/link';
 import MyButton from '../components/NewsCard';
 import NewsCard from '../components/NewsCard';
 import styles from '../styles/Home.module.css';
@@ -23,12 +22,7 @@ const Home: NextPage = ({ articles }) => {
           {articles.articles.map((article) => {
             return (
               <li key={article.title}>
-                <Link
-                  href={`/article/${encodeURIComponent(article.title)}`}
-                  passHref
-                >
-                  <NewsCard post={article} />
-                </Link>
+                <NewsCard post={article} />
               </li>
             );
           })}
