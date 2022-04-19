@@ -2,6 +2,8 @@
 
 I did this test for Conde Nast. **I had a time limit of 2h.**
 
+Reference: [https://github.com/conde-nast-international/cnid-tech-tests/tree/master/se-test](https://github.com/conde-nast-international/cnid-tech-tests/tree/master/se-test)
+
 ## Task description
 
 Build a JavaScript application that shows the latest news world-wide, using the newsapi.org service.
